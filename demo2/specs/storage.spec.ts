@@ -11,5 +11,9 @@ if (pulumi.runtime.isDryRun()) {
             const name = await promise(storageAccount.name);
             expect(name).to.equal("pulumidemo2");
         });
+        it("should be in the west europe region", async () => {
+            const region = await promise(storageAccount.location);
+            expect(region).to.equal("westeurope");
+        })
     });
 }
