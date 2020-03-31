@@ -2,6 +2,8 @@ import * as azure from "@pulumi/azure";
 import * as azuread from "@pulumi/azuread"
 import * as k8s from "@pulumi/kubernetes"
 import * as random from "@pulumi/random"
+import * as docker from "@pulumi/docker";
+import * as pulumi from "@pulumi/pulumi"
 
 const password = new random.RandomPassword("password", {
     length: 20,
@@ -16,6 +18,25 @@ const adSpPassword = new azuread.ServicePrincipalPassword("aksSpPassword", {
     servicePrincipalId: adSp.id,
     value: password,
     endDate: "2099-01-01T00:00:00Z",
+});
+
+const registry = new azure.containerservice.Registry("myregistry", {
+    resourceGroupName: resourceGroup.name,
+    sku: "Basic",
+    adminEnabled: true,
+});
+
+const customImage = "node-app";
+const myImage = new docker.Image(customImage, {
+    imageName: pulumi.interpolate`${registry.loginServer}/${customImage}:v1.0.0`,
+    build: {
+        context: `./${customImage}`,
+    },
+    registry: {
+        server: registry.loginServer,
+        username: registry.adminUsername,
+        password: registry.adminPassword,
+    },
 });
 
 const cluster = new azure.containerservice.KubernetesCluster("pulumi-cluster", {
@@ -43,7 +64,6 @@ const cluster = new azure.containerservice.KubernetesCluster("pulumi-cluster", {
 const provider = new k8s.Provider("aksK8s", {
     kubeconfig: cluster.kubeConfigRaw
 })
-
 
 const jenkins = new k8s.helm.v2.Chart(
     "jenkins",
