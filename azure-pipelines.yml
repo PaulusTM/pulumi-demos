@@ -23,7 +23,7 @@ steps:
 
 - task: Pulumi@1
   inputs:
-    azureSubscription: 'Personal(9bb8c095-6d36-4f5e-8ed4-d072260c0716)'
+    azureSubscription: 'Personal'
     command: 'up'
     args: '-y --skip-preview'
     cwd: 'aks/'
