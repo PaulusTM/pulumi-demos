@@ -24,6 +24,7 @@ steps:
 - task: Pulumi@1
   inputs:
     azureSubscription: 'Personal'
-    command: 'preview'
+    command: 'up'
+    args: '-y --skip-preview'
     cwd: 'aks/'
     stack: 'dpnl87/aks/dev'
