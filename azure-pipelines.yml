@@ -16,6 +16,10 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
+- task: HelmInstaller@1
+  inputs:
+    helmVersionToInstall: 'v2'
+
 - task: Npm@1
   inputs:
     command: 'install'
