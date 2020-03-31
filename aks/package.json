@@ -1,0 +1,13 @@
+{
+    "name": "aks",
+    "devDependencies": {
+        "@types/node": "^8.0.0"
+    },
+    "dependencies": {
+        "@pulumi/azure": "^2.3.1",
+        "@pulumi/azuread": "^1.8.0",
+        "@pulumi/kubernetes": "^1.6.0",
+        "@pulumi/pulumi": "^1.0.0",
+        "@pulumi/random": "^1.7.0"
+    }
+}
