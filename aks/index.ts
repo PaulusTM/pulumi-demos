@@ -27,6 +27,9 @@ const cluster = new azure.containerservice.KubernetesCluster("pulumi-cluster", {
         vmSize: "Standard_B2s",
         osDiskSizeGb: 30,
     },
+    windowsProfile: { // strange, but if you don't it create a new cluster every time.
+        adminUsername: "azureuser",
+    },
     dnsPrefix: "pulumi-cluster",
     servicePrincipal: {
         clientId: adApp.applicationId,
