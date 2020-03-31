@@ -43,3 +43,22 @@ const cluster = new azure.containerservice.KubernetesCluster("pulumi-cluster", {
 const provider = new k8s.Provider("aksK8s", {
     kubeconfig: cluster.kubeConfigRaw
 })
+
+
+const jenkins = new k8s.helm.v2.Chart(
+    "jenkins",
+    {
+        repo: "stable",
+        chart: "jenkins",
+        version: "1.10.1",
+        namespace: "default",
+    },
+    { providers: { kubernetes: provider } },
+);
+
+export let clusterName = cluster.name;
+export let kubeConfig = cluster.kubeConfigRaw;
+
+
+    // $ pulumi stack output kubeConfig > kubeconfig.yaml
+    // $ KUBECONFIG=./kubeconfig.yaml kubectl get service
